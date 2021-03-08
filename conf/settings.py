@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS =  ['127.0.0.1', 'django-batch-maker-beahoop.herokuapp.com']
+ALLOWED_HOSTS =  ['127.0.0.1', 'django-batch-maker-beahoop.herokuapp.com/']
 
 
 
@@ -39,10 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
+
+    #3rd party
 
     #local
     'accounts.apps.AccountsConfig',
+
+
 ]
 
 MIDDLEWARE = [
