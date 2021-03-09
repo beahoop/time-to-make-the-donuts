@@ -1,5 +1,7 @@
 import {Component} from 'react';
 import Cookies from 'js-cookie';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Header from "./components/Header";
 import RecipeList from './components/RecipeList';
 import RecipeForm from './components/RecipeForm';
 import Register from './components/Register';
@@ -11,12 +13,15 @@ class App extends Component {
   super(props);
   this.state = {
     recipes: [],
+    recipeImage: null,
+    preview: "",
     isLoggedIn: !!Cookies.get('Authorization'),
   }
 
 this.addRecipe = this.addRecipe.bind(this);
 this.removeRecipe = this.removeRecipe.bind(this);
 this.editRecipe = this.editRecipe.bind(this);
+this.handleImage = this.handleImage.bind(this);
 this.handleLogin = this.handleLogin.bind(this);
 this.handleLogOut = this.handleLogOut.bind(this);
 this.handleRegistration = this.handleRegistration.bind(this);
@@ -45,6 +50,10 @@ addRecipe(recipe){
   const recipes = [...this.state.recipes]
   recipes.push(recipe);
   this.setState({ recipes })
+  this.setState({
+    recipeImage: null,
+    preview: "",
+  })
 }
 removeRecipe(recipe){
     const recipes = [...this.state.recipes];
@@ -156,22 +165,82 @@ async handleRegistration(e, obj) {
     localStorage.setItem("user", JSON.stringify(user));
     this.setState({isLoggedIn: true})
   }
-
 }
+
+
+handleImage(event) {
+    let file = event.target.files[0];
+    this.setState({recipeImage: file});
+
+    let reader = new FileReader()
+    //FileReader is a built in method async-ness
+    reader.onloadend = () => {
+    this.setState({preview: reader.result})
+    }
+    reader.readAsDataURL(file);
+    //this is where we tell the filereader to actually read the file
+}
+
+  // async handleImageEdit(event) {
+  //   event.preventDefault();
+  //   let formData = new FormData();
+  //   formData.append('profile_picture', this.state.profile_picture);
+  //   //this is append method speically for FormData
+  //
+  //   const options = {
+  //     method: 'PUT',
+  //     headers: {
+  //       'X-CSRFToken': Cookies.get('csrftoken')
+  //     },
+  //     body: formData
+  //   }
+  //   const response = await fetch('/profiles/detail', options);
+  //   console.log(response);
+  //   this.setState({preview: null})
+  // }
   render(){
     return (
-      <div className="App">
+        <div className="nav-bar">
+      <BrowserRouter>
+        <Header   handleLogOut={this.handleLogOut}
+          isLoggedIn={this.state.isLoggedIn}/>
+      <Switch>
+
+        <Route path="/login" children={
+            <Login
+              isLoggedIn={this.state.isLoggedIn}
+              handleLogin={this.handleLogin}
+            />
+          }></Route>
+        <Route path="/register" children={
+              <Register
+                isLoggedIn={this.state.isLoggedIn}
+                handleRegistration ={this.handleRegistration}
+              />
+            }></Route>
+        <Route path="/recipes" children={
+            <RecipeList
+              recipes={this.state.recipes}
+              removeRecipe = {this.removeRecipe}
+              editRecipe={this.editRecipe}
+              />
+          }></Route>
+        <Route path="/recipeform" children={
+          <RecipeForm
+            preview={this.state.preview}
+            recipeImage={this.state.recipeImage}
+            handleImage = {this.handleImage}
+            addRecipe={this.addRecipe}/>
+            }></Route>
+      </Switch>
+      </BrowserRouter>
+
+
 
         HEY!
-        <RecipeList
-          recipes={this.state.recipes}
-          removeRecipe = {this.removeRecipe}
-          editRecipe={this.editRecipe}
-          />
-        <RecipeForm
-          addRecipe={this.addRecipe}/>
-        <Login handleLogin={this.handleLogin}/>
-        <Register handleRegistration={this.handleRegistration}/>
+
+
+
 
       </div>
     );

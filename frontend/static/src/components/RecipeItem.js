@@ -42,20 +42,26 @@ filterRecipes(event){
 }
 
 render(){
+  const ingredientList = this.props.recipe.ingredients.map((ing, index) => (
+    <li key={index}>
+      <h2>{ing.qty} {ing.unit} of {ing.type}  </h2>
+    </li>
+   ));
   const recipe = this.props.recipe;
+  console.log('recipe', recipe);
   return(
     <>
+
     <li key={recipe.id} className="repice-li">
           <h4 className="repice-title">{recipe.title}</h4>
           <p className="repice-type">{recipe.type_meal} Yeilds {recipe.yeild}</p>
           <span className="repice-type">Prep time: {recipe.prep_time} |</span>
           <span className="repice-type">Cook time: {recipe.cook_time} |</span>
           <span className="repice-type"> {recipe.cook_temp} {recipe.degree} |</span>
-
           <p className = "repice-list-text" >
             {recipe.directions}
             </p>
-
+            <ul>{ ingredientList }</ul>
           <p className="repice-author">Writen by: {recipe.author}</p>
           <p className="repice-published">This repice is {recipe.published}</p>
           <p className="repice-published">Directions {recipe.directions}</p>
@@ -85,6 +91,8 @@ render(){
               </button>
 
         </li>
+
+
     </>
   )
 }
