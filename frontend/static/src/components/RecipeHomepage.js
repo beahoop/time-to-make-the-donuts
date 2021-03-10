@@ -42,7 +42,7 @@ filterRecipes(event){
 render(){
 
   const recipe = this.props.recipes.map((recipe) => (
-    <div key={recipe.id} className="listImg col-3 gx-5">
+    <div key={recipe.id} className="listImg">
       <a href={`/recipe/${recipe.id}`}>
           <img className="homepage-img" src={recipe.image} alt="preview"/>
         </a>

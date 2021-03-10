@@ -81,26 +81,20 @@ render(){
               value={this.state.newyields} onChange={this.handleInputEdit}
               onKeyUp={(event) => this.handleEdit(event, this.state.newyields)}/>
               :
-            <p className="repice-yields">yields {this.state.newyields}</p>
+            <span className="repice-yields">yields {this.state.newyields} </span>
             }
 
           {!this.state.isEditing
 
             ?
-            <button class="btn" type="button" onClick={() => this.setState({ isEditing: !this.state.isEditing })}>
-          Edit
-            </button>
+
+            <button class="btn btn-outline-success" type="button" onClick={() => this.setState({ isEditing: !this.state.isEditing })}>
+          Make More
+        </button>
             :
             null
           }
-
-
-
-
-
-
-
-
+          <br/>
           <span className="repice-type">Prep time: {recipe.prep_time} |</span>
           <span className="repice-type">Cook time: {recipe.cook_time} |</span>
           <span className="repice-type"> {recipe.cook_temp} {recipe.degree} |</span>
@@ -113,25 +107,9 @@ render(){
           <p className="repice-published">This repice is {recipe.published}</p>
           <p className="repice-published">Directions {recipe.directions}</p>
           <p className="repice-published">Notes {recipe.notes}</p>
+          <p className = "recipe-list-text-profile" > {recipe.body} </p>
 
-            {this.state.isEditing
-              ?
-              <input type="note" name="note"
-              value={this.state.note} onChange={this.handleInputEdit}
-              onKeyUp={(event) => this.handleEdit(event, recipe)}/>
-              :
-              <p className = "recipe-list-text-profile" > {recipe.body} </p>
-            }
 
-          {!this.state.isEditing
-
-            ?
-            <button className="btn" type="button" onClick={() => this.setState({ isEditing: !this.state.isEditing })}>
-            Edit
-            </button>
-            :
-            null
-          }
 
               <button className="btn" type="button" onClick={()=> this.props.removeRecipe(recipe)}>
               Delete

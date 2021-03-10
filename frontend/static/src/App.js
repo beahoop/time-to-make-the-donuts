@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Header from "./components/Header";
 import RecipeList from './components/RecipeList';
 import RecipeForm from './components/RecipeForm';
+import RecipeEdit from './components/RecipeEdit';
 import RecipeDetail from './components/RecipeDetail';
 import Register from './components/Register';
 import RecipeHomepage from './components/RecipeHomepage';
@@ -256,7 +257,9 @@ handleImage(event) {
                   addRecipe={this.addRecipe}/>
               }/>
 
-            <Route path="/recipe/:id" component={RecipeDetail}/>
+            <Route exact path="/recipe/:id" component={RecipeDetail}/>
+            <Route exact path="/recipe/edit/:id" component={RecipeEdit}/>
+
 
             </div>
 
