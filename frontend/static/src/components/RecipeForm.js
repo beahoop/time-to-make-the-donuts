@@ -12,7 +12,7 @@ class RecipeForm extends Component{
     prep_time: '',
     cook_temp: '',
     cook_time: '',
-    yeild: '',
+    yields: '',
     food_type: '',
     ingredients: [],
     directions: '',
@@ -62,7 +62,7 @@ const article = {
   prep_time: this.state.prep_time,
   cook_temp: this.state.cook_temp,
   cook_time: this.state.cook_time,
-  yeild: this.state.yeild,
+  yields: this.state.yields,
   food_type: this.state.food_type,
   ingredients: this.state.ingredients,
   directions: this.state.directions,
@@ -95,7 +95,7 @@ const article = {
         prep_time: '',
         cook_temp: '',
         cook_time: '',
-        yeild: '',
+        yields: '',
         food_type: '',
         ingredients: [],
         directions: '',
@@ -120,9 +120,14 @@ const ingredientsInput = this.state.ingredients.map((ingredient, index) => (
 
   return(
     <>
-    <div className="RecipeForm">
+    <div className="RecipeForm row">
           <form className="form">
-            <input type="file" name='recipeImage' onChange={this.props.handleImage}/>
+          <label for="file-upload" class="custom-file-upload">
+                  <p className="imagePlus"> + </p>
+                  <p className="imageText"> Add photo</p>
+          </label>
+            <input id="file-upload" type="file" name='recipeImage'  onChange={this.props.handleImage}/>
+
                {this.props.recipeImage && <img className="pre-img" src={this.props.preview} alt="preview"/>}
                <button type="submit"> Upload</button>
 
@@ -154,7 +159,7 @@ const ingredientsInput = this.state.ingredients.map((ingredient, index) => (
                  </select>
 
 
-            <input type="yeild" id="recipe-yeild" name="yeild" value={this.state.yeild} onChange={this.handleInput} placeholder="Yeilds" required/><br/>
+            <input type="yields" id="recipe-yields" name="yields" value={this.state.yields} onChange={this.handleInput} placeholder="yieldss" required/><br/>
 
             <input type="food_type" id="recipe-food_type" name="food_type" value={this.state.food_type} onChange={this.handleInput} placeholder="Muffins, donuts, etc..." required/><br/>
 

@@ -13,7 +13,7 @@ class RecipeItem extends Component{
     prep_time: '',
     cook_time: '',
     cook_temp: '',
-    yeild: '',
+    yields: '',
     food_type: '',
     ingredients: [],
     directions: '',
@@ -41,57 +41,17 @@ filterRecipes(event){
   this.setState({recipeSelection: recipeType})
 }
 
+
 render(){
-  const ingredientList = this.props.recipe.ingredients.map((ing, index) => (
-    <li key={index}>
-      <h2>{ing.qty} {ing.unit} of {ing.type}  </h2>
-    </li>
-   ));
   const recipe = this.props.recipe;
   console.log('recipe', recipe);
   return(
     <>
-
-    <li key={recipe.id} className="repice-li">
-          <h4 className="repice-title">{recipe.title}</h4>
-          <p className="repice-type">{recipe.type_meal} Yeilds {recipe.yeild}</p>
-          <span className="repice-type">Prep time: {recipe.prep_time} |</span>
-          <span className="repice-type">Cook time: {recipe.cook_time} |</span>
-          <span className="repice-type"> {recipe.cook_temp} {recipe.degree} |</span>
-          <p className = "repice-list-text" >
-            {recipe.directions}
-            </p>
-            <ul>{ ingredientList }</ul>
-          <p className="repice-author">Writen by: {recipe.author}</p>
-          <p className="repice-published">This repice is {recipe.published}</p>
-          <p className="repice-published">Directions {recipe.directions}</p>
-          <p className="repice-published">Notes {recipe.notes}</p>
-
-            {this.state.isEditing
-              ?
-              <input type="note" name="note"
-              value={this.state.note} onChange={this.handleInputEdit}
-              onKeyUp={(event) => this.handleEdit(event, recipe)}/>
-              :
-              <p className = "recipe-list-text-profile" > {recipe.body} </p>
-            }
-
-          {!this.state.isEditing
-
-            ?
-            <button className="btn" type="button" onClick={() => this.setState({ isEditing: !this.state.isEditing })}>
-            Edit
-            </button>
-            :
-            null
-          }
-
-              <button className="btn" type="button" onClick={()=> this.props.removeRecipe(recipe)}>
-              Delete
-              </button>
-
-        </li>
-
+    <div className="listImg col-3 gx-5 ">
+      <a href={`/recipe/${recipe.id}`}>
+          <img className="homepage-img" src={recipe.image} alt="preview"/>
+        </a>
+</div>
 
     </>
   )

@@ -1,9 +1,14 @@
 import RecipeItem from './RecipeItem';
-// 
+//
 // LOOK AT ID
 function RecipeList(props) {
   console.log(props);
-  const recipe = props.recipes.map((recipe) => (
+  const recipe = props.recipes.filter(recipe => {
+    if(JSON.parse(localStorage.getItem('user')).username === recipe.author){
+      return recipe
+    }
+    return console.log('nope');
+  }).map((recipe) => (
       <RecipeItem key={recipe.id} recipe={recipe} articles={props.aRecipe}
       editRecipe={props.editRecipe}
       isLoggedIn={props.isLoggedIn}
@@ -12,7 +17,7 @@ function RecipeList(props) {
 
   return(
     <>
-    <ul className="recipeList"> { recipe }  </ul>
+    <ul className="row"> { recipe }  </ul>
     </>
   )
 }

@@ -4,7 +4,9 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Header from "./components/Header";
 import RecipeList from './components/RecipeList';
 import RecipeForm from './components/RecipeForm';
+import RecipeDetail from './components/RecipeDetail';
 import Register from './components/Register';
+import RecipeHomepage from './components/RecipeHomepage';
 import Login from './components/Login';
 import './App.css';
 
@@ -12,6 +14,7 @@ class App extends Component {
   constructor(props) {
   super(props);
   this.state = {
+    clickedId: null,
     recipes: [],
     recipeImage: null,
     preview: "",
@@ -46,6 +49,9 @@ componentDidMount() {
         }
       )
   }
+
+
+
 addRecipe(recipe){
   const recipes = [...this.state.recipes]
   recipes.push(recipe);
@@ -113,11 +119,11 @@ async handleLogin(e, obj){
   const handleError = (err) => console.warn(err);
   const response = await fetch('/rest-auth/login/', options);
   const data = await response.json().catch(handleError);
-  console.log(data);
+  console.log("data",data);
 
   if(data.key){
     Cookies.set('Authorization', `Token ${data.key}`);
-    const user = {username: data.username, is_staff: data.is_staff}
+    const user = {username: data.username}
     localStorage.setItem("user", JSON.stringify(user));
     this.setState({isLoggedIn: true })
     }
@@ -161,7 +167,7 @@ async handleRegistration(e, obj) {
 
   if (data.key) {
     Cookies.set('Authorization', `Token ${data.key}`);
-    const user = {username: data.username, is_staff: data.is_staff}
+    const user = {username: data.username}
     localStorage.setItem("user", JSON.stringify(user));
     this.setState({isLoggedIn: true})
   }
@@ -200,52 +206,79 @@ handleImage(event) {
   // }
   render(){
     return (
-        <div className="nav-bar">
-      <BrowserRouter>
-        <Header   handleLogOut={this.handleLogOut}
-          isLoggedIn={this.state.isLoggedIn}/>
-      <Switch>
+      <div className="container">
+        <div className="row-12">
+          <div className="nav-bar">
+        <BrowserRouter>
+          <Header   handleLogOut={this.handleLogOut}
+            isLoggedIn={this.state.isLoggedIn}/>
+        <Switch>
 
-        <Route path="/login" children={
-            <Login
-              isLoggedIn={this.state.isLoggedIn}
-              handleLogin={this.handleLogin}
-            />
-          }></Route>
-        <Route path="/register" children={
-              <Register
-                isLoggedIn={this.state.isLoggedIn}
-                handleRegistration ={this.handleRegistration}
-              />
-            }></Route>
-        <Route path="/recipes" children={
-            <RecipeList
-              recipes={this.state.recipes}
-              removeRecipe = {this.removeRecipe}
-              editRecipe={this.editRecipe}
-              />
-          }></Route>
-        <Route path="/recipeform" children={
-          <RecipeForm
-            preview={this.state.preview}
-            recipeImage={this.state.recipeImage}
-            handleImage = {this.handleImage}
-            addRecipe={this.addRecipe}/>
-            }></Route>
+          <div className="row">
+            <div className="col-1">
+              Side bar
+            </div>
+            <div className="col-10">
+              <Route path="/login" children={
+                  <Login
+                    isLoggedIn={this.state.isLoggedIn}
+                    handleLogin={this.handleLogin}
+                  />
+                }></Route>
+              <Route path="/register" children={
+                    <Register
+                      isLoggedIn={this.state.isLoggedIn}
+                      handleRegistration ={this.handleRegistration}
+                    />
+                  }></Route>
+                <Route path="/recipes" children={
+                      <RecipeHomepage
+                        recipes={this.state.recipes}
+                        removeRecipe = {this.removeRecipe}
+                        editRecipe={this.editRecipe}
+                        preview={this.state.preview}
+                        recipeImage={this.state.recipeImage}
+                        handleImage = {this.handleImage}
+                        addRecipe={this.addRecipe}/>
+                    }/>
+                  <Route path="/user/recipes" children={
+                  <RecipeList
+                    recipes={this.state.recipes}
+                    removeRecipe = {this.removeRecipe}
+                    editRecipe={this.editRecipe}
+                    />
+                }/>
+              <Route path="/recipeform" children={
+                <RecipeForm
+                  preview={this.state.preview}
+                  recipeImage={this.state.recipeImage}
+                  handleImage = {this.handleImage}
+                  addRecipe={this.addRecipe}/>
+              }/>
+
+            <Route path="/recipe/:id" component={RecipeDetail}/>
+
+            </div>
+
+          </div>
+
+
       </Switch>
       </BrowserRouter>
 
 
-
-        HEY!
-
+      </div>
 
 
 
+       </div>
       </div>
     );
   }
 
 }
+
+      // <Route path="/recipe/:id" children={<RecipeDetail
+      //       setClickedId={this.setClickedId}/>}
 
 export default App;

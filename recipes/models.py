@@ -36,7 +36,7 @@ class Recipe(models.Model):
         (C, 'Celsius'),
 
     ]
-    # image = models.ImageField(upload_to='recipes/', null=True)
+    image = models.ImageField(upload_to='recipes/', null=True)
     title = models.CharField(max_length=150, null=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     published =  models.CharField(
@@ -57,7 +57,7 @@ class Recipe(models.Model):
         default= F,
     )
     cook_temp = models.FloatField(null=True)
-    yeild = models.FloatField(null=True)
+    yields = models.FloatField(null=True)
     foodtype = models.CharField(max_length=150, null=True)
     ingredients = models.JSONField(encoder=None, decoder=None, null=True)
     directions = models.TextField(max_length=500, null=True)
