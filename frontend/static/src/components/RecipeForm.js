@@ -19,6 +19,7 @@ class RecipeForm extends Component{
     notes: '',
     image: this.props.recipeImage,
     preview: this.props.preview,
+    author: (JSON.parse(localStorage.getItem('user')).username),
   }
   this.handleInput = this.handleInput.bind(this);
   this.handleSubmit = this.handleSubmit.bind(this);
@@ -57,7 +58,7 @@ handleInput(event){
 
 handleSubmit(event){
 event.preventDefault();
-const article = {
+const recipe = {
   title: this.state.title,
   prep_time: this.state.prep_time,
   cook_temp: this.state.cook_temp,
@@ -68,7 +69,9 @@ const article = {
   directions: this.state.directions,
   notes: this.state.notes,
   image: this.state.recipeImage,
+  author: (JSON.parse(localStorage.getItem('user')).username),
   }
+
 
   fetch('/api/v1/', {
     method: 'POST',
@@ -76,7 +79,7 @@ const article = {
       'Content-Type': 'application/json',
       'X-CSRFToken' : Cookies.get('csrftoken'),
     },
-    body: JSON.stringify(article),
+    body: JSON.stringify(recipe),
   })
     .then(response => {
       if(!response.ok){
@@ -87,6 +90,7 @@ const article = {
     .then(data => {//here is where I got back my DJANGO object and
       this.props.addRecipe(data);//here is where I added it to state for react
       //because django gave me the ID and the username to show it on react
+
       console.log('Success. Message created!', data)})
       .catch(error => console.log('Error:', error))
       .finally('I am always going to fire!');
@@ -102,6 +106,7 @@ const article = {
         notes: '',
         image: '',
         preview: '',
+        author: (JSON.parse(localStorage.getItem('user')).username),
       })
     };
 
@@ -121,18 +126,29 @@ const ingredientsInput = this.state.ingredients.map((ingredient, index) => (
   return(
     <>
     <div className="RecipeForm row">
-          <form className="form">
-          {!this.props.recipeImage &
-            <span>
-            <label for="file-upload" class="custom-file-upload">
-                <p className="imagePlus"> + </p>
-                  <p className="imageText"> Add photo</p>
-          </label> <input id="file-upload" type="file" name='recipeImage'  onChange={this.props.handleImage}/>
-          </span>}
-          {this.props.recipeImage && <img className="pre-img" src={this.props.preview} alt="preview"/>}
-
-
-          <input type="title" id="recipe-title" name="title" value={this.state.title} onChange={this.handleInput} placeholder="Title" required/><br/>
+          <form className="form col-8 mx-auto">
+          <div className="row">
+            <div className="preimg col-4">
+              {!this.props.recipeImage &&
+                <span>
+                <label for="file-upload" className="custom-file-upload">
+              <p className="imagePlus"> + </p>
+              <p className="imageText"> Add photo</p>
+              </label> <input id="file-upload" type="file" name='recipeImage'  onChange={this.props.handleImage}/>
+              </span>}
+              {this.props.recipeImage &&
+              <img className="pre-img" src={this.props.preview} alt="preview"/>}
+            </div>
+            <div className="col-8">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
+                </div>
+                <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="recipe-title" name="title" value={this.state.title} onChange={this.handleInput} placeholder="Title" required/><br/>
+              </div>
+            <p>Author: {this.state.author}</p>
+            </div>
+          </div>
 
 
           <select id="meal_type" name="meal_type" required>

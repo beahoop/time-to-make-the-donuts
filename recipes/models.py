@@ -16,16 +16,16 @@ class Recipe(models.Model):
         (ARC, 'Archived'),
     ]
 
-    BR8 = 'Breakfast'
-    LNH = 'Lunch'
-    DIN = 'Dinner'
-    DES = 'Dessert'
+    Breakfast = 'Breakfast'
+    Lunch = 'Lunch'
+    Dinner = 'Dinner'
+    Dessert = 'Dessert'
 
     MEAL_TYPES = [
-        (BR8, 'Breakfast'),
-        (LNH, 'Lunch'),
-        (DIN, 'Dinner'),
-        (DES, 'Dessert'),
+        (Breakfast, 'Breakfast'),
+        (Lunch, 'Lunch'),
+        (Dinner, 'Dinner'),
+        (Dessert, 'Dessert'),
     ]
     F = 'Fahrenheit'
     C = 'Celsius'
@@ -47,7 +47,7 @@ class Recipe(models.Model):
     type_meal= models.CharField(
         max_length=15,
         choices=MEAL_TYPES,
-        default= LNH,
+        default= Breakfast,
     )
     prep_time = models.FloatField(null=True)
     cook_time = models.FloatField(null=True)

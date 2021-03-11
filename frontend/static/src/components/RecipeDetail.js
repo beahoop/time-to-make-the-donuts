@@ -88,7 +88,7 @@ render(){
 
             ?
 
-            <button class="btn btn-outline-success" type="button" onClick={() => this.setState({ isEditing: !this.state.isEditing })}>
+            <button className="btn btn-outline-success" type="button" onClick={() => this.setState({ isEditing: !this.state.isEditing })}>
           Make More
         </button>
             :

@@ -11,16 +11,32 @@ input[type="file"] {
     line-height: 30px;
     background-color: #BBBBBB;
 }
+.edit-file-upload {
+    border-radius: 3px;
+    padding: 0px 8px;
+    cursor: pointer;
+    margin: 10px;
+    /* margin-left: -30%; */
+    text-align: center;
+    background-color: #BBBBBB;
+}
+.preimg{
+  overflow: hidden;
+}
+.imageEdit{
+  color: #5A5A5A;
+  font-weight: bolder;
+  font-size: 1rem;
+}
 .imagePlus{
   color: #5A5A5A;
   font-weight: bolder;
   font-size: 50px;
 }
-/* .side-navbar{
-  width:  15%;
-  display: flex;
-  flex-direction: column;
-} */
+.sidebar{
+height: 100vh;
+
+}
 .pre-img{
   height:300px;
   overflow: hidden;
@@ -43,7 +59,8 @@ input[type="file"] {
 }
 
 .recipe-img{
-  height: 150%;
+  width: 110%;
+  margin-top: -15%;
   padding-bottom: 50px;
 
 }

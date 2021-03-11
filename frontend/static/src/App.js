@@ -2,6 +2,7 @@ import {Component} from 'react';
 import Cookies from 'js-cookie';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Header from "./components/Header";
+import Header2 from "./components/Header2";
 import RecipeList from './components/RecipeList';
 import RecipeForm from './components/RecipeForm';
 import RecipeEdit from './components/RecipeEdit';
@@ -216,8 +217,9 @@ handleImage(event) {
         <Switch>
 
           <div className="row">
-            <div className="col-1">
-              Side bar
+            <div className="col-2">
+              <Header2
+                  isLoggedIn={this.state.isLoggedIn}/>
             </div>
             <div className="col-10">
               <Route path="/login" children={
@@ -259,6 +261,7 @@ handleImage(event) {
 
             <Route exact path="/recipe/:id" component={RecipeDetail}/>
             <Route exact path="/recipe/edit/:id" component={RecipeEdit}/>
+          
 
 
             </div>

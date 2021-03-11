@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Cookies from 'js-cookie';
-import Example from "./Example";
+// import Example from "./Example";
 
 
 class RecipeEdit extends Component{
@@ -16,6 +16,7 @@ class RecipeEdit extends Component{
     prep_time: '',
     cook_temp: '',
     cook_time: '',
+    type_meal: '',
     yields: '',
     food_type: '',
     ingredients: [],
@@ -26,6 +27,7 @@ class RecipeEdit extends Component{
     newyields: null,
   }
   this.handleInputEdit = this.handleInputEdit.bind(this);
+  this.handleChange = this.handleChange.bind(this);
   this.handleEdit = this.handleEdit.bind(this);
   this.handleInput = this.handleInput.bind(this);
   this.handleSubmit = this.handleSubmit.bind(this);
@@ -41,7 +43,7 @@ componentDidMount() {
         console.log('response', result)
         this.setState({
           recipe: result,
-          meal_type: result.meal_type,
+          type_meal: result.type_meal,
           yields: result.yields,
           newyields: result.yields,
           title: result.title,
@@ -114,8 +116,9 @@ handleInput(event){
 
 
 handleSubmit(event){
-event.preventDefault();
-const article = {
+const recipe = {
+  type_meal: this.state.type_meal,
+  image: this.props.recipeImage,
   title: this.state.title,
   prep_time: this.state.prep_time,
   cook_temp: this.state.cook_temp,
@@ -125,45 +128,32 @@ const article = {
   ingredients: this.state.ingredients,
   directions: this.state.directions,
   notes: this.state.notes,
-  image: this.state.recipeImage,
   }
 
-  fetch('/api/v1/', {
-    method: 'POST',
+  fetch(`/api/v1/${this.props.match.params.id}`, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       'X-CSRFToken' : Cookies.get('csrftoken'),
     },
-    body: JSON.stringify(article),
+    body: JSON.stringify(recipe),
   })
     .then(response => {
-      if(!response.ok){
-        throw new Error ('Bad Post request');
-      }
-      return response.json()
+    if(!response.ok){
+      throw new Error ('Bad Post request');
+    }
+    return response.json()
     })
-    .then(data => {//here is where I got back my DJANGO object and
-      this.props.addRecipe(data);//here is where I added it to state for react
-      //because django gave me the ID and the username to show it on react
-      console.log('Success. Message created!', data)})
-      .catch(error => console.log('Error:', error))
-      .finally('I am always going to fire!');
-      this.setState({
-        title: '',
-        prep_time: '',
-        cook_temp: '',
-        cook_time: '',
-        yields: '',
-        food_type: '',
-        ingredients: [],
-        directions: '',
-        notes: '',
-        image: '',
-        preview: '',
-      })
-    };
+  .then(data => console.log('Success. ChatApp created!'))
+  .catch(error => console.log('Error:', error))
+  .finally('I am always going to fire!');
+};
 
+handleChange(event) {
+  console.log(event.target.name, event.target.value);
+  this.setState({ [event.target.name]: event.target.value });
 
+}
 
 
 render(){
@@ -190,8 +180,8 @@ const ingredientsInput = this.state.ingredients.map((ingredient, index) => (
 
   return(
     <>
-    <Example/>
-    <button type="button" class="btn btn-secondary btn-lg btn-block" onClick={() => this.setState({ isEditing: !this.state.isEditing })}>Edit</button>
+
+
     {!this.state.isEditing
       ?
       <li key={recipe.id} className="repice-li">
@@ -222,25 +212,31 @@ const ingredientsInput = this.state.ingredients.map((ingredient, index) => (
 
         <div className="RecipeForm row">
           <form className="form">
-
+            <div className="img-container">
+            <img className="recipe-img" src={recipe.image} alt="preview"/>
+            </div>
             <span>
-            <label for="file-upload" class="custom-file-upload">
-          <p className="imagePlus"> + </p>
-          <p className="imageText"> Add photo</p>
+            <label for="file-upload" className="edit-file-upload">
+          <p className="imageEdit"> Edit Photo </p>
           </label> <input id="file-upload" type="file" name='recipeImage'  onChange={this.props.handleImage}/>
           </span>
-          <div className="editImgForm">
-          <img className="homepage-img" src={recipe.image} alt="preview"/>
-          </div>
+
           {this.props.recipeImage && <img className="pre-img" src={this.props.preview} alt="preview"/>}
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
+            </div>
+            <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="recipe-title" name="title" value={this.state.title} onChange={this.handleInput} placeholder="Title" required/><br/>
+          </div>
 
-          <input type="title" id="recipe-title" name="title" value={this.state.title} onChange={this.handleInput} placeholder="Title" required/><br/>
 
-          <select id="meal_type" name="meal_type" defaultValue="LNH" required>
-             <option value="BR8">Breakfast</option>
-             <option value="LNH">Lunch</option>
-             <option value="DIN">Dinner</option>
-             <option value="DES">Dessert</option>
+
+
+          <select id="type_meal" name="type_meal" value={this.state.type_meal} onChange={this.handleChange} defaultValue={this.state.type_meal} required>
+             <option value="Breakfast">Breakfast</option>
+             <option value="Lunch">Lunch</option>
+             <option value="Dinner">Dinner</option>
+             <option value="Dessert">Dessert</option>
            </select>
 
            <select id="published" name="Published" required>
@@ -284,8 +280,10 @@ const ingredientsInput = this.state.ingredients.map((ingredient, index) => (
             </div>
             <button type="button" onClick={this.handleSubmit}>Submit</button>
           </form>
+
        </div>
      }
+     <button type="button" className="btn btn-secondary btn-lg btn-block" onClick={() => this.setState({ isEditing: !this.state.isEditing })}>Edit</button>
     </>
   )
 }
