@@ -69,7 +69,7 @@ const popRecipe = this.props.recipes.filter(recipe => {
 ));
 
 const draftRecipe = this.props.recipes.filter(recipe => {
-  if(recipe.published === "Draft"){
+  if(this.props.isLoggedIn && recipe.published === "Draft"){
     return recipe
   }
   return console.log('nope');
@@ -98,54 +98,59 @@ const PublicRecipe = this.props.recipes.filter(recipe => {
   return(
     <>
     {this.props.isLoggedIn
-      ?
-      <div className="row">
-        <div className="divider  col-4 col-md-6 col-lg-8 col-xl-9">
-          My Repices <span className="float-right" onClick={() => this.setState({ viewAll: "My" })}>Veiw Alls</span>
-        </div>
-        </div>
-
-      :
-      null
+    ?
+    <div className="row">
+      <div className="divider  col-4 col-md-6 col-lg-8 col-xl-9">
+        My Repices <span className="float-right" onClick={() => this.setState({ viewAll: "My" })}>Veiw Alls</span>
+      </div>
+    </div>
+    :
+    null
     }
 
-      {this.state.viewAll === "My"
-        ?
-        <ul className="row"> { myrecipe }  </ul>
-      :
+    {this.state.viewAll === "My"
+    ?
+    <ul className="row"> { myrecipe }  </ul>
+    :
     <ul className="row flex-nowrap"> { myrecipe }  </ul>
-  }
+    }
+
+    <div className="row">
+      <div className="divider  col-4 col-md-6 col-lg-8 col-xl-9">
+        Public Repices <span className="float-right" onClick={() => this.setState({ viewAll: "Public" })}>Veiw Alls</span>
+      </div>
+    </div>
+    {this.state.viewAll === "Public"
+      ?
+      <ul className="row public"> { PublicRecipe }  </ul>
+      :
+      <ul className="row flex-nowrap public"> { PublicRecipe }  </ul>
+      }
 
       <div className="row">
         <div className="divider  col-4 col-md-6 col-lg-8 col-xl-9">
-          Public Repices <span className="float-right" onClick={() => this.setState({ viewAll: "Public" })}>Veiw Alls</span>
+          Popular Repices <span className="float-right" onClick={() => this.setState({ viewAll: "Popular" })}>Veiw Alls</span>
         </div>
         </div>
-        {this.state.viewAll === "Public"
+        {this.state.viewAll === "Popular"
           ?
-          <ul className="row public"> { PublicRecipe }  </ul>
+          <ul className="row public"> { popRecipe }  </ul>
           :
-          <ul className="row flex-nowrap public"> { PublicRecipe }  </ul>
+          <ul className="row flex-nowrap public"> { popRecipe }  </ul>
           }
-
-
-        <div className="row">
-          <div className="divider  col-4 col-md-6 col-lg-8 col-xl-9">
-            Popular Repices <span className="float-right" onClick={() => this.setState({ viewAll: "Popular" })}>Veiw Alls</span>
-          </div>
-          </div>
-          {this.state.viewAll === "Popular"
+          {this.props.isLoggedIn
             ?
-            <ul className="row public"> { popRecipe }  </ul>
-            :
-            <ul className="row flex-nowrap public"> { popRecipe }  </ul>
-            }
-            <div className="row">
-              <div className="divider  col-4 col-md-6 col-lg-8 col-xl-9">
-                My Pantry <span className="float-right" onClick={() => this.setState({ viewAll: "Draft" })}>Veiw Alls</span>
-              </div>
-              </div>
-              {this.state.viewAll === "Draft"
+          <div className="row">
+            <div className="divider  col-4 col-md-6 col-lg-8 col-xl-9">
+              My Pantry <span className="float-right" onClick={() => this.setState({ viewAll: "Draft" })}>Veiw Alls</span>
+            </div>
+          </div>
+
+                    :
+                    null
+                  }
+
+              {this.state.viewAll === "Drafts"
                 ?
                 <ul className="row public"> { draftRecipe }  </ul>
                 :

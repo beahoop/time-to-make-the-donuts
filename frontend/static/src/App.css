@@ -1,3 +1,19 @@
+* {
+font-family: serif;
+}
+.main-nav {
+  background-color: #EDBD65;
+  color: #3E211E;
+}
+.main-nav a{
+  color: #3E211E;
+  padding: 10px;
+  text-decoration: none;
+}
+
+.navbar-1{
+  font-weight: bolder;
+}
 /* ////////////////////FILE UPLOADS */
 input[type="file"] {
     display: none;
@@ -38,8 +54,9 @@ input[type="file"] {
   font-size: 50px;
 }
 .sidebar{
-height: 100vh;
-background-color: #E6E6E6;
+min-height: 100vh;
+height: 100%;
+background-color: #F2DFDB;
 padding: 10px;
 text-align: center;
 }
@@ -49,13 +66,12 @@ margin-top: 20%;
 }
 
 .sidenav a{
-color: #6C6C6C;
-font-family: serif;
+color: #9E623D;
 text-decoration: none;
 font-weight:600;
 margin-bottom: 100px;
 padding: 10px;
-border-bottom: 1px solid #6C6C6C;
+border-bottom: 2px solid #9E623D;
 }
 .pre-img{
   height:300px;
@@ -118,6 +134,10 @@ border-bottom: 1px solid #6C6C6C;
 .repice-author{
   text-transform: capitalize;
 }
+
+.yieldsSec {
+  margin: 10px 0px;
+}
 /* //////////////////RECIPE HOMEPAGE */
 
 .divider{
@@ -139,22 +159,65 @@ border-bottom: 1px solid #6C6C6C;
 }
 
 .spbetween{
-    margin: 0px 10px;
+  margin: 0px 10px;
 }
 
 .ingul {
-padding: 0px;
+  padding: 0px;
 }
 
 
 li {
   list-style: none;
 }
+/* ///////////////RECIPE DETAIL */
+
+.detail {
+  margin-top: 50px;
+}
+
+.repice-title {
+  font-size: 3em;
+  text-align: center;
+  margin-bottom: -10px;
+}
+
+.recipe-author {
+  text-align: center;
+  font-size: 1rem;
+  text-transform: capitalize;
+}
+
+.timeSec{
+  font-weight: bolder;
+}
+
+.submit-btn{
+  margin: 10px 0px;
+}
 /* ////////////////MEDIA QUERIES */
 
 @media (min-width: 768px) {
   .container{
     max-width:1500px;
+  }
+
+}
+
+
+@media (max-width: 700px) {
+  .repice-title {
+    font-size: 1em;
+    text-align: center;
+    margin-bottom: -10px;
+  }
+
+}
+
+@media (max-width: 2000px) {
+  .container{
+    max-width:2000px;
+    padding: 0px
   }
 
 }

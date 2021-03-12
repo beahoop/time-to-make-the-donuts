@@ -15,7 +15,7 @@ function Header2(props) {
     null}
 
     <p className=""><NavLink to="/public/recipes">Public Recipes</NavLink></p>
-    <p className=""><NavLink to="/Popular/recipes">Popular Recipes</NavLink></p>
+    <p className=""><NavLink to="/popular/recipes">Popular Recipes</NavLink></p>
 </div>
     </>
   )

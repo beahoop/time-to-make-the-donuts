@@ -59,63 +59,83 @@ render(){
   const recipe = this.state.recipe;
   const newyields = (this.state.newyields / this.state.yields)
   const ingredientList = this.state.recipe.ingredients?.map((ing, index) => (
-    <li key={index}>
-      <h2>{ing.qty * newyields } {ing.unit} of {ing.type}  </h2>
-    </li>
+      <tr>
+        <th scope="row">{ing.qty * newyields} </th>
+        <td>{ing.unit}</td>
+        <td> of</td>
+        <td> {ing.type}</td>
+      </tr>
    ));
 
   console.log('recipe', recipe);
   return(
     <>
 
-    <div className="row">
-
+    <div className="row detail">
+    <div className="col-10 col-md-12 mx-auto">
     <div className="repice-li col-8 mx-auto">
-        <h4 className="repice-title">{recipe.title}</h4>
-        <p className="repice-author">By: {recipe.author}</p>
-          <div className="img-container">
-          <img className="recipe-img" src={recipe.image} alt="preview"/>
-          </div>
+      <div className="row">
+        <p className="repice-title col-12">{recipe.title}</p>
+      </div>
+        <p className="recipe-author">By: {recipe.author}</p>
 
-          <p className="repice-type">{recipe.type_meal}</p>
+          <div className="row">
+          <img className="img-fluid" src={recipe.image} alt="preview"/>
+          </div>
+          <div className="yieldsSec row">
+          <span className="col-4 repice-type float-start">Make for: {recipe.type_meal}</span>
 
             {this.state.isEditing
               ?
-              <input type="number"  min="0" step={`${recipe.yields}`} name="newyields"
-              value={this.state.newyields} onChange={this.handleInputEdit}
-              onKeyUp={(event) => this.handleEdit(event, this.state.newyields)}/>
+              <div class=" col-4 input-group mb-3">
+                <div class="input-group-prepend">
+                  <input type="number"  min="0" step={`${recipe.yields}`} name="newyields"
+                  value={this.state.newyields} onChange={this.handleInputEdit}
+                  onKeyUp={(event) => this.handleEdit(event, this.state.newyields)}/>
+                </div>
+              </div>
               :
-            <span className="repice-yields">yields {this.state.newyields} </span>
+            <span className="col-4 repice-yields">yields {this.state.newyields} </span>
             }
-
           {!this.state.isEditing
-
             ?
-
-            <button className="btn btn-outline-success" type="button" onClick={() => this.setState({ isEditing: !this.state.isEditing })}>
-          Make More
-        </button>
+          <button className="btn col-4 btn-outline-info" type="button" onClick={() => this.setState({ isEditing: !this.state.isEditing })}>
+              Make More
+          </button>
             :
             null
           }
-          <br/>
-          <span className="repice-type">Prep time: {recipe.prep_time} |</span>
-          <span className="repice-type">Cook time: {recipe.cook_time} |</span>
-          <span className="repice-type"> {recipe.cook_temp} {recipe.degree} |</span>
-          <p className = "repice-list-text" >
-            {recipe.directions}
-            </p>
-            <ul>{ ingredientList }</ul>
+          </div>
 
 
-          <p className="repice-published">This repice is {recipe.published}</p>
-          <p className="repice-published">Directions {recipe.directions}</p>
-          <p className="repice-published">Notes {recipe.notes}</p>
-          <p className = "recipe-list-text-profile" > {recipe.body} </p>
+
+
+          <div className="row">
+          <span className="col-4 repice-prepTime">Prep time: {recipe.prep_time} </span>
+          <span className="col-4 repice-cookTime">Cook time: {recipe.cook_time} </span>
+          <span className="col-4 repiceTemp"> {recipe.cook_temp} {recipe.degree} </span>
+          </div>
+
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Unit</th>
+                  <th scope="col"></th>
+                  <th scope="col">type</th>
+                </tr>
+              </thead>
+              <tbody>
+              { ingredientList }
+              </tbody>
+            </table>
+          <p className="repice-published">Directions: {recipe.directions}</p>
+          <p className="repice-published">Notes: {recipe.notes}</p>
+
 
         </div>
       </div>
-
+    </div>
     </>
   )
 }

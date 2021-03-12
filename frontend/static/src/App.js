@@ -6,8 +6,8 @@ import Header2 from "./components/Header2";
 import RecipeList from './components/RecipeList';
 import RecipeForm from './components/RecipeForm';
 import RecipeEdit from './components/RecipeEdit';
+import RecipePop from './components/RecipePop';
 import RecipePublic from './components/RecipePublic';
-
 import RecipeDetail from './components/RecipeDetail';
 import Register from './components/Register';
 import RecipeHomepage from './components/RecipeHomepage';
@@ -131,7 +131,6 @@ async handleLogin(e, obj){
     localStorage.setItem("user", JSON.stringify(user));
     this.setState({isLoggedIn: true })
   }
-
 }
 
 async handleLogOut(e){
@@ -239,6 +238,7 @@ handleImage(event) {
                   }></Route>
                 <Route exact path="/recipes" children={
                       <RecipeHomepage
+                        isLoggedIn={this.state.isLoggedIn}
                         recipes={this.state.recipes}
                         editRecipe={this.editRecipe}
                         preview={this.state.preview}
@@ -268,9 +268,11 @@ handleImage(event) {
               <Route excat path="/public/recipes" children={
               <RecipePublic
                 recipes={this.state.recipes}
-
-                />
-            }/>
+                />}/>
+              <Route excat path="/popular/recipes" children={
+                <RecipePop
+                  recipes={this.state.recipes}
+                  />}/>
 
               <Route exact path="/" children={
                       <RecipeHomepage

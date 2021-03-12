@@ -202,84 +202,139 @@ render(){
   const recipe = this.state.recipe;
   const newyields = (this.state.newyields / this.state.yields)
   const ingredientList = this.state.recipe.ingredients?.map((ing, index) => (
-    <li key={index}>
-      <h2>{ing.qty * newyields } {ing.unit} of {ing.type}  </h2>
-    </li>
+    <tr>
+      <th scope="row">{ing.qty * newyields} </th>
+      <td>{ing.unit}</td>
+      <td> of</td>
+      <td> {ing.type}</td>
+    </tr>
    ));
 
 
 const ingredientsInput = this.state.ingredients.map((ingredient, index) => (
-  <li key={index}>
-    <input type="qty" id="recipe-qty" name="qty"
+  <tr key={index}>
+    <th scope="row"> <input type="qty" id="recipe-qty" name="qty"
         value={ingredient.qty} onChange={this.handleInput} placeholder={ingredient.qty} required/>
-    <input type="unit" id="recipe-unit" name="unit"
+      </th>
+  <td><input type="unit" id="recipe-unit" name="unit"
           value={ingredient.unit} onChange={this.handleInput} placeholder={ingredient.unit}required/> of
-    <input type="type" id="recipe-type" name="type"
+          </td>
+    <td><input type="type" id="recipe-type" name="type"
     value={ingredient.type} onChange={this.handleInput} placeholder={ingredient.type} required/>
-  <button onClick={()=>this.removeIngredient(ingredient)}> -</button>
-  </li>
+</td>
+<button onClick={()=>this.removeIngredient(ingredient)}> -</button>
+    </tr>
 ));
 
   return(
     <>
 
+    <div className="row mx-auto">
+      <div className="col-10">
 
     {!this.state.isEditing
       ?
-      <li key={recipe.id} className="repice-li">
-            <div className="img-container">
-            <img className="recipe-img" src={recipe.image} alt="preview"/>
+      <div key={recipe.id} className="repice-li">
+        <p className="repice-title">{recipe.title}</p>
+        <p className="recipe-author">Writen by: {recipe.author}</p>
+            <div className="row">
+            <img className="col-12 img-fluid" src={recipe.image} alt="preview"/>
             </div>
-            <h4 className="repice-title">{recipe.title}</h4>
-            <p className="repice-type">{recipe.type_meal}</p>
 
-              <span className="repice-yields">yields {this.state.yields} </span>
+            <div className="yieldsSec row mx-auto">
+            <span className="col-4 repice-type">Make for: {recipe.type_meal}</span>
+            <span className="col-4 repice-yields">Yields: {this.state.newyields} </span>
+            <p className="col-4 repice-published">This repice is: {recipe.published}</p>
+            </div>
 
-            <br/>
-            <span className="repice-type">Prep time: {recipe.prep_time} |</span>
-            <span className="repice-type">Cook time: {recipe.cook_time} |</span>
-            <span className="repice-type"> {recipe.cook_temp} {recipe.degree} |</span>
-            <p className = "repice-list-text" >
-              {recipe.directions}
-              </p>
-              <ul>{ ingredientList }</ul>
-
-            <p className="repice-author">Writen by: {recipe.author}</p>
-            <p className="repice-published">This repice is {recipe.published}</p>
+            <div className="row mx-auto timeSec">
+            <span className="col-4 repice-prepTime">Prep time: {recipe.prep_time} </span>
+            <span className="col-4 repice-cookTime">Cook time: {recipe.cook_time} </span>
+            <span className="col-4 repiceTemp"> Temp: {recipe.cook_temp} {recipe.degree} </span>
+            </div>
+            <div className="row mx-auto">
+              <table className="table col-12 mx-auto">
+                <thead>
+                  <tr>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Unit</th>
+                    <th scope="col"></th>
+                    <th scope="col">type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  { ingredientList }
+                  </tbody>
+                </table>
+              </div>
+            <div className="row mx-auto">
             <p className="repice-published">Directions {recipe.directions}</p>
             <p className="repice-published">Notes {recipe.notes}</p>
-            <p className = "recipe-list-text-profile" > {recipe.body} </p>
-          </li>
+            </div>
+
+      </div>
       :
 
         <div className="RecipeForm row">
           <form className="form">
-            <div className="img-container">
-            <img className="recipe-img" src={recipe.image} alt="preview"/>
+            <div className=" row">
+            <img className="img-fluid" src={recipe.image} alt="preview"/>
             </div>
-            <span>
-            <label for="file-upload" className="edit-file-upload">
-          <p className="imageEdit"> Edit Photo </p>
-          </label> <input id="file-upload" type="file" name='recipeImage'  onChange={this.props.handleImage}/>
-          </span>
 
           {this.props.recipeImage && <img className="pre-img" src={this.props.preview} alt="preview"/>}
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
+
+          <label for="file-upload" className="edit-file-upload">
+        <p className="imageEdit"> Edit Photo </p>
+        </label> <input id="file-upload" type="file" name='recipeImage'  onChange={this.props.handleImage}/>
+
+          <div className="col-8">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
+              </div>
+              <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="recipe-title" name="title" value={this.state.title} onChange={this.handleInput} placeholder="Title" required/><br/>
             </div>
-            <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="recipe-title" name="title" value={this.state.title} onChange={this.handleInput} placeholder="Title" required/><br/>
+             </div>
+            <div className="col-4">
+                <p className="repice-author">By: {recipe.author}</p>
+              </div>
+
+            <select className=" col-3 custom-select custom-select-sm" id="published" name="Published" required>
+               <option value="Private">Private</option>
+               <option value="Public">Public</option>
+               <option value="Popular">Popular</option>
+               <option value="Draft">Draft</option>
+             </select>
+
+
+
+
+          <div className="row sp mx-auto">
+            <select className=" col-3 custom-select custom-select-sm"  id="meal_type" name="meal_type" required>
+               <option value="Breakfast">Breakfast</option>
+               <option value="Lunch">Lunch</option>
+               <option value="Dinner">Dinner</option>
+               <option value="Dessert">Dessert</option>
+             </select>
+
+
+             <div className="input-group col-3 input-group-sm mb-3">
+             <input className="form-control"  type="prep_time" id="recipe-prep-time" name="prep_time" value={this.state.prep_time} onChange={this.handleInput} placeholder="Prep time" required/>
+             </div>
+
+             <div className="input-group col-3 input-group-sm mb-3">
+             <input className="form-control" type="cook_time" id="recipe-cook-time" name="cook_time" value={this.state.cook_time} onChange={this.handleInput} placeholder="Cook time" required/>
+             </div>
+
+             <div className="input-group col-2 input-group-sm mb-3">
+             <input className="form-control" type="cook_temp" id="recipe-cook-temp" name="cook_temp" value={this.state.cook_temp} onChange={this.handleInput} placeholder="Cook temp" required/>
+             </div>
+             <select className="col-1  custom-select custom-select-sm" id="Degree" name="Degree" required>
+                  <option value="F">F</option>
+                  <option value="C">C</option>
+                </select>
           </div>
 
-
-
-
-          <select id="type_meal" name="type_meal" value={this.state.type_meal} onChange={this.handleChange} defaultValue={this.state.type_meal} required>
-             <option value="Breakfast">Breakfast</option>
-             <option value="Lunch">Lunch</option>
-             <option value="Dinner">Dinner</option>
-             <option value="Dessert">Dessert</option>
-           </select>
 
            <select id="published" name="Published" required>
               <option value="PRI">Private</option>
@@ -288,48 +343,71 @@ const ingredientsInput = this.state.ingredients.map((ingredient, index) => (
             </select>
 
 
-            <input type="prep_time" id="recipe-prep-time" name="prep_time" value={this.state.prep_time} onChange={this.handleInput} placeholder="Prep time" required/><br/>
-
-            <input type="cook_time" id="recipe-cook-time" name="cook_time" value={this.state.cook_time} onChange={this.handleInput} placeholder="Cook time" required/><br/>
-
-            <input type="cook_temp" id="recipe-cook-temp" name="cook_temp" value={this.state.cook_temp} onChange={this.handleInput} placeholder="Cook temp" required/>
-              <select id="Degree" name="Degree" required>
-                   <option value="F">F</option>
-                   <option value="C">C</option>
-                 </select>
-
 
             <input type="yields" id="recipe-yields" name="yields" value={this.state.yields} onChange={this.handleInput} placeholder="yieldss" required/><br/>
 
             <input type="food_type" id="recipe-food_type" name="food_type" value={this.state.food_type} onChange={this.handleInput} placeholder="Muffins, donuts, etc..." required/><br/>
 
-            <textarea rows="4" cols="50" type="directions" id="recipe-directions" name="directions" value={this.state.directions} onChange={this.handleInput} placeholder="Directions" required></textarea><br/>
-
-            <textarea rows="4" cols="50" type="notes" id="recipe-notes" name="notes" value={this.state.notes} onChange={this.handleInput} placeholder="Notes" required></textarea><br/>
-
-          <ul>{ ingredientsInput }</ul>
-
-            <div className="example">
-            <input type="qty" id="recipe-qty" name="qty"
-                value={this.state.qty} onChange={this.handleInput} placeholder="qty" required/>
-            <input type="unit" id="recipe-unit" name="unit"
-                  value={this.state.unit} onChange={this.handleInput} placeholder="unit" /> of
-            <input type="type" id="recipe-type" name="type"
-            value={this.state.type} onChange={this.handleInput} placeholder="type" required/>
 
 
-          <button onClick={()=>this.addIngredient(this.state.qty, this.state.unit, this.state.type )}> + </button>
-            </div>
-            <button type="button" onClick={this.handleSubmit}>Submit</button>
-          </form>
+              <table className="table col-12 mx-auto">
+                <thead>
+                  <tr>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Unit</th>
+                    <th scope="col"></th>
+                    <th scope="col">type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  { ingredientsInput  }
+                  </tbody>
+                </table>
+
+                <div className="example">
+                <input type="qty" id="recipe-qty" name="qty"
+                    value={this.state.qty} onChange={this.handleInput} placeholder="qty" required/>
+                <input type="unit" id="recipe-unit" name="unit"
+                      value={this.state.unit} onChange={this.handleInput} placeholder="unit" /> of
+                <input type="type" id="recipe-type" name="type"
+                value={this.state.type} onChange={this.handleInput} placeholder="type" required/>
+
+
+              <button onClick={()=>this.addIngredient(this.state.qty, this.state.unit, this.state.type )}> + </button>
+                </div>
+                <div className="row sp mx-auto">
+                  <div class="mb-3">
+                   <label for="exampleFormControlTextarea1" class="form-label"></label>
+                   <textarea class="form-control" id="exampleFormControlTextarea1" name="directions" value={this.state.directions} onChange={this.handleInput} placeholder="Directions"
+                     rows="3">
+                   </textarea>
+                 </div>
+                 <div class="mb-3">
+                  <label for="exampleFormControlTextarea1" class="form-label"></label>
+                  <textarea class="form-control" id="exampleFormControlTextarea1" name="notes" value={this.state.notes} onChange={this.handleInput} placeholder="Notes"
+                  rows="3">
+                  </textarea>
+                </div>
+                 </div>
+      <button className="submit-btn btn btn-outline-info btn-lg btn-block" type="button" onClick={this.handleSubmit}>Submit</button>
+    </form>
 
        </div>
      }
      <button className="btn btn-danger btn-lg btn-block" type="button " onClick={()=> this.removeRecipe(recipe)}>
      Delete
      </button>
-     <button type="button" className="btn btn-secondary btn-lg btn-block" onClick={() => this.setState({ isEditing: !this.state.isEditing })}>Edit</button>
-    </>
+     {!this.state.isEditing
+       ?
+       <button type="button" className="btn btn-secondary btn-lg btn-block" onClick={() => this.setState({ isEditing: !this.state.isEditing })}>Edit</button>
+       :
+       null
+
+     }
+
+     </div>
+     </div>
+  </>
   )
 }
 

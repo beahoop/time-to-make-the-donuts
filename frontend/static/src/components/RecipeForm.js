@@ -184,7 +184,8 @@ const ingredientsInput = this.state.ingredients.map((ingredient, index) => (
               {this.state.image &&
               <img className="pre-img" src={this.state.preview} alt="preview"/>}
             </div>
-            <div className="col">
+
+            <div className="col-8">
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
@@ -198,7 +199,8 @@ const ingredientsInput = this.state.ingredients.map((ingredient, index) => (
                  <option value="Popular">Popular</option>
                  <option value="Draft">Draft</option>
                </select>
-            </div>
+               </div>
+
 
           </div>
 
