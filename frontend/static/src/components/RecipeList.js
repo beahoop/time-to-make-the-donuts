@@ -17,6 +17,11 @@ function RecipeList(props) {
 
   return(
     <>
+    <div className="row">
+      <div className="divider  col-4 col-md-6 col-lg-8 col-xl-9">
+        My Repices
+      </div>
+      </div>
     <ul className="row"> { recipe }  </ul>
     </>
   )

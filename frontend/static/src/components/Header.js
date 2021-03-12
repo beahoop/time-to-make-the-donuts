@@ -7,9 +7,9 @@ function Header(props) {
   return (
     <>
     <div className="navbar sticky-top navbar-light bg-light">
-      <span className="navbar-brand"><NavLink to="/recipes">Freshly Baked</NavLink></span>
+      <span className="navbar-brand"><NavLink to="/recipes">The Pie Chart</NavLink></span>
       <span className="navbar-brand"><NavLink to="/recipes">Batch Maker</NavLink></span>
-    
+
 
       <span className="navbar-brand plus"><NavLink to="/recipeform">+</NavLink></span>
 

@@ -8,6 +8,9 @@ class RecipesListView(generics.ListCreateAPIView):
     queryset = models.Recipe.objects.all()
     serializer_class = RecipeSerialier
 
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
     # def get_queryset(self):
     #     # import pbd; pbd.set_trace()
     #     #will let you stop your code here and debug
@@ -18,6 +21,8 @@ class RecipesDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Recipe.objects.all()
     serializer_class = RecipeSerialier
 
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
     # def get_queryset(self):
     #     user = self.request.user
     #     return  models.Recipe.objects.filter(author=user)

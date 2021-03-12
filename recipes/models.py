@@ -4,16 +4,16 @@ from django.conf import settings
 # Create your models here.
 
 class Recipe(models.Model):
-    DFT = 'Draft'
-    PUB = 'Published'
-    PRI = 'Approval'
-    ARC = 'Archived'
+    Draft = 'Draft'
+    Public = 'Public'
+    Private = 'Private'
+    Popular = 'Popular'
 
     PHASES = [
-        (DFT, 'Draft'),
-        (PUB, 'Public'),
-        (PRI, 'Private'),
-        (ARC, 'Archived'),
+        (Draft, 'Draft'),
+        (Public, 'Public'),
+        (Private, 'Private'),
+        (Popular, 'Popular'),
     ]
 
     Breakfast = 'Breakfast'
@@ -42,7 +42,7 @@ class Recipe(models.Model):
     published =  models.CharField(
         max_length=15,
         choices=PHASES,
-        default= DFT,
+        default= Draft,
     )
     type_meal= models.CharField(
         max_length=15,
@@ -63,5 +63,6 @@ class Recipe(models.Model):
     directions = models.TextField(max_length=500, null=True)
     notes = models.TextField(max_length=500, null=True)
    	 #character field can only be 255 long
-def __str__(self):
-    return self.title[:50]
+
+    def __str__(self):
+        return self.title[:50]

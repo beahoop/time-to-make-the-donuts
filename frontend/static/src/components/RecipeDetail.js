@@ -68,11 +68,15 @@ render(){
   return(
     <>
 
-    <li key={recipe.id} className="repice-li">
+    <div className="row">
+
+    <div className="repice-li col-8 mx-auto">
+        <h4 className="repice-title">{recipe.title}</h4>
+        <p className="repice-author">By: {recipe.author}</p>
           <div className="img-container">
           <img className="recipe-img" src={recipe.image} alt="preview"/>
           </div>
-          <h4 className="repice-title">{recipe.title}</h4>
+
           <p className="repice-type">{recipe.type_meal}</p>
 
             {this.state.isEditing
@@ -103,19 +107,14 @@ render(){
             </p>
             <ul>{ ingredientList }</ul>
 
-          <p className="repice-author">Writen by: {recipe.author}</p>
+
           <p className="repice-published">This repice is {recipe.published}</p>
           <p className="repice-published">Directions {recipe.directions}</p>
           <p className="repice-published">Notes {recipe.notes}</p>
           <p className = "recipe-list-text-profile" > {recipe.body} </p>
 
-
-
-              <button className="btn" type="button" onClick={()=> this.props.removeRecipe(recipe)}>
-              Delete
-              </button>
-
-        </li>
+        </div>
+      </div>
 
     </>
   )

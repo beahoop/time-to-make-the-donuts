@@ -18,10 +18,11 @@ class RecipeForm extends Component{
     directions: '',
     notes: '',
     image: this.props.recipeImage,
-    preview: this.props.preview,
+    preview: '',
     author: (JSON.parse(localStorage.getItem('user')).username),
   }
   this.handleInput = this.handleInput.bind(this);
+    this.handleImage = this.handleImage.bind(this);
   this.handleSubmit = this.handleSubmit.bind(this);
   this.addIngredient = this.addIngredient.bind(this);
 
@@ -55,60 +56,104 @@ removeIngredient(ingredient){
 handleInput(event){
   this.setState({ [event.target.name]: event.target.value });
 }
+async handleSubmit(e){
+  e.preventDefault();
+  let formData = new FormData();
 
-handleSubmit(event){
-event.preventDefault();
-const recipe = {
-  title: this.state.title,
-  prep_time: this.state.prep_time,
-  cook_temp: this.state.cook_temp,
-  cook_time: this.state.cook_time,
-  yields: this.state.yields,
-  food_type: this.state.food_type,
-  ingredients: this.state.ingredients,
-  directions: this.state.directions,
-  notes: this.state.notes,
-  image: this.state.recipeImage,
-  author: (JSON.parse(localStorage.getItem('user')).username),
-  }
+  let obj = { ...this.state }
+  obj.ingredients = JSON.stringify(obj.ingredients);
+  for (const prop in obj){
+    formData.append(prop, obj[prop]);
+  };
 
-
-  fetch('/api/v1/', {
+  const options = {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken' : Cookies.get('csrftoken'),
+      'X-CSRFToken': Cookies.get('csrftoken'),
     },
-    body: JSON.stringify(recipe),
+    body: formData,
+  };
+  const handleError = (err) => console.warn(err);
+  const response = await fetch('/api/v1/', options);
+  await response.json().catch(handleError);
+  this.setState({
+    title: '',
+    prep_time: '',
+    cook_temp: '',
+    cook_time: '',
+    yields: '',
+    food_type: '',
+    ingredients: [],
+    directions: '',
+    notes: '',
+    image: '',
+    preview: '',
   })
-    .then(response => {
-      if(!response.ok){
-        throw new Error ('Bad Post request');
-      }
-      return response.json()
-    })
-    .then(data => {//here is where I got back my DJANGO object and
-      this.props.addRecipe(data);//here is where I added it to state for react
-      //because django gave me the ID and the username to show it on react
+}
 
-      console.log('Success. Message created!', data)})
-      .catch(error => console.log('Error:', error))
-      .finally('I am always going to fire!');
-      this.setState({
-        title: '',
-        prep_time: '',
-        cook_temp: '',
-        cook_time: '',
-        yields: '',
-        food_type: '',
-        ingredients: [],
-        directions: '',
-        notes: '',
-        image: '',
-        preview: '',
-        author: (JSON.parse(localStorage.getItem('user')).username),
-      })
-    };
+// handleSubmit(event){
+// event.preventDefault();
+// const recipe = {
+//   title: this.state.title,
+//   prep_time: this.state.prep_time,
+//   cook_temp: this.state.cook_temp,
+//   cook_time: this.state.cook_time,
+//   yields: this.state.yields,
+//   food_type: this.state.food_type,
+//   ingredients: this.state.ingredients,
+//   directions: this.state.directions,
+//   notes: this.state.notes,
+//   image: this.state.image,
+//   }
+//   fetch('/api/v1/', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'X-CSRFToken' : Cookies.get('csrftoken'),
+//     },
+//     body: JSON.stringify(recipe),
+//   })
+//     .then(response => {
+//       if(!response.ok){
+//         throw new Error ('Bad Post request');
+//       }
+//       return response.json()
+//     })
+//     .then(data => {//here is where I got back my DJANGO object and
+//       this.props.addRecipe(data);//here is where I added it to state for react
+//       //because django gave me the ID and the username to show it on react
+//
+//       console.log('Success. Message created!', data)})
+//       .catch(error => console.log('Error:', error))
+//       .finally('I am always going to fire!');
+    //   this.setState({
+    //     title: '',
+    //     prep_time: '',
+    //     cook_temp: '',
+    //     cook_time: '',
+    //     yields: '',
+    //     food_type: '',
+    //     ingredients: [],
+    //     directions: '',
+    //     notes: '',
+    //     image: '',
+    //     preview: '',
+    //   })
+    // };
+
+handleImage(event) {
+  console.log("I FIRED");
+    let file = event.target.files[0];
+    this.setState({image: file});
+
+    let reader = new FileReader()
+    //FileReader is a built in method async-ness
+    reader.onloadend = () => {
+    this.setState({preview: reader.result})
+    }
+    reader.readAsDataURL(file);
+    //this is where we tell the filereader to actually read the file
+}
 
 render(){
 const ingredientsInput = this.state.ingredients.map((ingredient, index) => (
@@ -125,80 +170,112 @@ const ingredientsInput = this.state.ingredients.map((ingredient, index) => (
 
   return(
     <>
-    <div className="RecipeForm row">
-          <form className="form col-8 mx-auto">
+    <div className="recipeForm row ">
+          <form className="formRep col-12 col-md-9 mx-auto">
           <div className="row">
-            <div className="preimg col-4">
-              {!this.props.recipeImage &&
+            <div className="preimg col-5 col-md-4">
+              {!this.state.image &&
                 <span>
                 <label for="file-upload" className="custom-file-upload">
               <p className="imagePlus"> + </p>
               <p className="imageText"> Add photo</p>
-              </label> <input id="file-upload" type="file" name='recipeImage'  onChange={this.props.handleImage}/>
+              </label> <input id="file-upload" type="file" name='image'  onChange={this.handleImage}/>
               </span>}
-              {this.props.recipeImage &&
-              <img className="pre-img" src={this.props.preview} alt="preview"/>}
+              {this.state.image &&
+              <img className="pre-img" src={this.state.preview} alt="preview"/>}
             </div>
-            <div className="col-8">
+            <div className="col">
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
                 </div>
                 <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="recipe-title" name="title" value={this.state.title} onChange={this.handleInput} placeholder="Title" required/><br/>
               </div>
-            <p>Author: {this.state.author}</p>
+            <p className="repice-author">By: {this.state.author}</p>
+              <select className=" col-3 custom-select custom-select-sm" id="published" name="Published" required>
+                 <option value="Private">Private</option>
+                 <option value="Public">Public</option>
+                 <option value="Popular">Popular</option>
+                 <option value="Draft">Draft</option>
+               </select>
             </div>
+
           </div>
 
 
-          <select id="meal_type" name="meal_type" required>
-             <option value="BR8">Breakfast</option>
-             <option value="LNH">Lunch</option>
-             <option value="DIN">Dinner</option>
-             <option value="DES">Dessert</option>
-           </select>
-
-           <select id="published" name="Published" required>
-              <option value="PRI">Private</option>
-              <option value="PUB">Public</option>
-              <option value="DFT">Draft</option>
-            </select>
+           <div className="row sp mx-auto">
+             <select className=" col-3 custom-select custom-select-sm"  id="meal_type" name="meal_type" required>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch">Lunch</option>
+                <option value="Dinner">Dinner</option>
+                <option value="Dessert">Dessert</option>
+              </select>
 
 
-            <input type="prep_time" id="recipe-prep-time" name="prep_time" value={this.state.prep_time} onChange={this.handleInput} placeholder="Prep time" required/><br/>
+              <div className="input-group col-3 input-group-sm mb-3">
+              <input className="form-control"  type="prep_time" id="recipe-prep-time" name="prep_time" value={this.state.prep_time} onChange={this.handleInput} placeholder="Prep time" required/>
+              </div>
 
-            <input type="cook_time" id="recipe-cook-time" name="cook_time" value={this.state.cook_time} onChange={this.handleInput} placeholder="Cook time" required/><br/>
+              <div className="input-group col-3 input-group-sm mb-3">
+              <input className="form-control" type="cook_time" id="recipe-cook-time" name="cook_time" value={this.state.cook_time} onChange={this.handleInput} placeholder="Cook time" required/>
+              </div>
 
-            <input type="cook_temp" id="recipe-cook-temp" name="cook_temp" value={this.state.cook_temp} onChange={this.handleInput} placeholder="Cook temp" required/>
-              <select id="Degree" name="Degree" required>
+              <div className="input-group col-2 input-group-sm mb-3">
+              <input className="form-control" type="cook_temp" id="recipe-cook-temp" name="cook_temp" value={this.state.cook_temp} onChange={this.handleInput} placeholder="Cook temp" required/>
+              </div>
+              <select className="col-1  custom-select custom-select-sm" id="Degree" name="Degree" required>
                    <option value="F">F</option>
                    <option value="C">C</option>
                  </select>
-
-
-            <input type="yields" id="recipe-yields" name="yields" value={this.state.yields} onChange={this.handleInput} placeholder="yieldss" required/><br/>
-
-            <input type="food_type" id="recipe-food_type" name="food_type" value={this.state.food_type} onChange={this.handleInput} placeholder="Muffins, donuts, etc..." required/><br/>
-
-            <input type="directions" id="recipe-directions" name="directions" value={this.state.directions} onChange={this.handleInput} placeholder="Directions" required/><br/>
-
-            <input type="notes" id="recipe-notes" name="notes" value={this.state.notes} onChange={this.handleInput} placeholder="Notes" required/><br/>
-
-          <ul>{ ingredientsInput }</ul>
-
-            <div className="example">
-            <input type="qty" id="recipe-qty" name="qty"
+           </div>
+           <div className="row ingul">
+          <ul className="">{ ingredientsInput }</ul>
+            <div className="input-group col-2 input-group-sm mb-3">
+            <input className="form-control" type="qty" id="recipe-qty" name="qty"
                 value={this.state.qty} onChange={this.handleInput} placeholder="qty" required/>
-            <input type="unit" id="recipe-unit" name="unit"
-                  value={this.state.unit} onChange={this.handleInput} placeholder="unit" /> of
-            <input type="type" id="recipe-type" name="type"
+              </div>
+
+              <div className="input-group col-4 input-group-sm mb-3"> <input  className="form-control" type="unit" id="recipe-unit" name="unit"
+                  value={this.state.unit} onChange={this.handleInput} placeholder="unit" />
+                  </div>
+                   of
+            <div className="input-group col-4 input-group-sm mb-3">
+            <input className="form-control" type="type" id="recipe-type" name="type"
             value={this.state.type} onChange={this.handleInput} placeholder="type" required/>
+          </div>
+
+          <button className="btnAdd btn btn-outline-info col-1" style={{height: "30px"}} onClick={()=>this.addIngredient(this.state.qty, this.state.unit, this.state.type )}>  + </button>
+
+          </div>
+           <div className="row sp mx-auto">
+             This recipe makes
+             <div className="input-group col-4 input-group-sm mb-3">
+             <input className="form-control" type="yields" id="recipe-yields" name="yields" value={this.state.yields} onChange={this.handleInput} placeholder="yields" required/>
+           </div>
+           <div className="input-group col-4 input-group-sm mb-3">
+           <input className="form-control"  type="food_type" id="recipe-food_type" name="food_type" value={this.state.food_type} onChange={this.handleInput} placeholder="Muffins, donuts, etc..." required/>
+         </div>
 
 
-          <button onClick={()=>this.addIngredient(this.state.qty, this.state.unit, this.state.type )}> + </button>
+           </div>
+
+           <div className="row sp mx-auto">
+             <div class="mb-3">
+              <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+              <textarea class="form-control" id="exampleFormControlTextarea1" name="directions" value={this.state.directions} onChange={this.handleInput} placeholder="Directions"
+                rows="3">
+              </textarea>
             </div>
-
-            <button type="button" onClick={this.handleSubmit}>Submit</button>
+            <div class="mb-3">
+             <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+             <textarea class="form-control" id="exampleFormControlTextarea1" name="notes" value={this.state.notes} onChange={this.handleInput} placeholder="Notes"
+             rows="3">
+             </textarea>
+           </div>
+            </div>
+            <div class="d-grid gap-2 col-6 mx-auto">
+            <button className="btn btn-outline-info" type="button" onClick={this.handleSubmit}>Submit</button>
+            </div>
           </form>
 
 

@@ -6,15 +6,16 @@ function Header2(props) {
 
   return (
     <>
-    <div className="sidebar navbar-dark bg-light">
+    <div className="sidebar">
     {isAuth
     ?
-    <span className="navbar-brand"><NavLink to="/user/recipes">My Recipes</NavLink></span>
+    <p className="">
+    <NavLink to="/user/recipes">Edit My Recipes</NavLink></p>
     :
     null}
 
-    <span className="navbar-brand"><NavLink to="/public/recipes">Public Recipes</NavLink></span>
-    <span className="navbar-brand"><NavLink to="/Popular/recipes">Popular Recipes</NavLink></span>
+    <p className=""><NavLink to="/public/recipes">Public Recipes</NavLink></p>
+    <p className=""><NavLink to="/Popular/recipes">Popular Recipes</NavLink></p>
 </div>
     </>
   )

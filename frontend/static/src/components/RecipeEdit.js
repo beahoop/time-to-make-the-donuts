@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Cookies from 'js-cookie';
-// import Example from "./Example";
 
 
 class RecipeEdit extends Component{
@@ -9,6 +8,7 @@ class RecipeEdit extends Component{
   this.state = {
     isEditing: false,
     recipe: [],
+    recipes: [],
     title: '',
     qty: '',
     unit: '',
@@ -29,13 +29,30 @@ class RecipeEdit extends Component{
   this.handleInputEdit = this.handleInputEdit.bind(this);
   this.handleChange = this.handleChange.bind(this);
   this.handleEdit = this.handleEdit.bind(this);
+  this.removeRecipe = this.removeRecipe.bind(this);
   this.handleInput = this.handleInput.bind(this);
   this.handleSubmit = this.handleSubmit.bind(this);
   this.addIngredient = this.addIngredient.bind(this);
 
 }
 
+
 componentDidMount() {
+  fetch("/api/v1/")
+    .then(res => res.json())
+    .then(
+      (result) => {
+        console.log('response', result)
+        this.setState({
+          recipes: result
+        });
+      },
+      (error) => {
+        this.setState({
+          error
+        });
+      }
+    )
   fetch(`/api/v1/${this.props.match.params.id}`)
     .then(res => res.json())
     .then(
@@ -65,6 +82,31 @@ componentDidMount() {
       }
     )
 }
+
+removeRecipe(recipe){
+    const recipes = [...this.state.recipes];
+    const index = recipes.indexOf(recipe);
+    recipes.splice(index, 1);
+    this.setState({ recipes });
+    fetch(`/api/v1/edit/${recipe.id}`,
+   {//type these out line by line some need more than others
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken' : Cookies.get('csrftoken'),
+        },
+      })
+        .then(response => {
+        if(!response.ok){
+          throw new Error ('Bad Post request');
+        }
+
+        })
+      .catch(error => console.log('Error:', error))
+      .finally(() => this.props.history.push("/recipes"));
+
+
+};
 
 handleEdit(event, recipe){
   if(event.keyCode === 13) {
@@ -283,6 +325,9 @@ const ingredientsInput = this.state.ingredients.map((ingredient, index) => (
 
        </div>
      }
+     <button className="btn btn-danger btn-lg btn-block" type="button " onClick={()=> this.removeRecipe(recipe)}>
+     Delete
+     </button>
      <button type="button" className="btn btn-secondary btn-lg btn-block" onClick={() => this.setState({ isEditing: !this.state.isEditing })}>Edit</button>
     </>
   )

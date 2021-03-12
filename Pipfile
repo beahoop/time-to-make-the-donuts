@@ -13,6 +13,8 @@ djangorestframework = "*"
 django-rest-auth = "~=0.9.5"
 django-allauth = "~=0.44.0"
 pillow = "~=8.0"
+django-storages = "*"
+boto3 = "*"
 
 [dev-packages]
 

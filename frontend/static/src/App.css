@@ -1,3 +1,4 @@
+/* ////////////////////FILE UPLOADS */
 input[type="file"] {
     display: none;
 }
@@ -20,8 +21,11 @@ input[type="file"] {
     text-align: center;
     background-color: #BBBBBB;
 }
+
+/* //////////////////HANDLING IMGS */
 .preimg{
   overflow: hidden;
+  padding: 0px;
 }
 .imageEdit{
   color: #5A5A5A;
@@ -35,7 +39,23 @@ input[type="file"] {
 }
 .sidebar{
 height: 100vh;
+background-color: #E6E6E6;
+padding: 10px;
+text-align: center;
+}
+.sidebar p{
+margin-top: 20%;
 
+}
+
+.sidenav a{
+color: #6C6C6C;
+font-family: serif;
+text-decoration: none;
+font-weight:600;
+margin-bottom: 100px;
+padding: 10px;
+border-bottom: 1px solid #6C6C6C;
 }
 .pre-img{
   height:300px;
@@ -95,6 +115,42 @@ height: 100vh;
   height: 150%;
 }
 
+.repice-author{
+  text-transform: capitalize;
+}
+/* //////////////////RECIPE HOMEPAGE */
+
+.divider{
+  border-bottom: 1px solid grey;
+  margin: 0px 25px;
+}
+/* ////////////////////////RECIPE FORM */
+.recipeForm {
+  margin: 50px 0px;
+}
+
+.formRep{
+  background-color: #E6E6E6;
+  border-radius: 10px;
+  padding: 50px;
+}
+.sp {
+  margin: 10px 0px;
+}
+
+.spbetween{
+    margin: 0px 10px;
+}
+
+.ingul {
+padding: 0px;
+}
+
+
+li {
+  list-style: none;
+}
+/* ////////////////MEDIA QUERIES */
 
 @media (min-width: 768px) {
   .container{

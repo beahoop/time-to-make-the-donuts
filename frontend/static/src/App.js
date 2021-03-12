@@ -6,6 +6,8 @@ import Header2 from "./components/Header2";
 import RecipeList from './components/RecipeList';
 import RecipeForm from './components/RecipeForm';
 import RecipeEdit from './components/RecipeEdit';
+import RecipePublic from './components/RecipePublic';
+
 import RecipeDetail from './components/RecipeDetail';
 import Register from './components/Register';
 import RecipeHomepage from './components/RecipeHomepage';
@@ -103,7 +105,7 @@ editRecipe(recipe, updatedText){
           }
           return response.json()
           })
-        .then(data => console.log('Success. ChatApp created!'))
+        .then(data => console.log('Success. Recipe created!'))
         .catch(error => console.log('Error:', error))
         .finally('I am always going to fire!');
   };
@@ -128,7 +130,8 @@ async handleLogin(e, obj){
     const user = {username: data.username}
     localStorage.setItem("user", JSON.stringify(user));
     this.setState({isLoggedIn: true })
-    }
+  }
+
 }
 
 async handleLogOut(e){
@@ -209,19 +212,19 @@ handleImage(event) {
   render(){
     return (
       <div className="container">
-        <div className="row-12">
+        <div className="row flex-nowrap">
           <div className="nav-bar">
         <BrowserRouter>
           <Header   handleLogOut={this.handleLogOut}
             isLoggedIn={this.state.isLoggedIn}/>
         <Switch>
 
-          <div className="row">
-            <div className="col-2">
+          <div className="row flex-nowrap">
+            <div className="sidenav col-6 col-md-4 col-lg-3 col-xl-2">
               <Header2
                   isLoggedIn={this.state.isLoggedIn}/>
             </div>
-            <div className="col-10">
+            <div className="col-6 col-md">
               <Route path="/login" children={
                   <Login
                     isLoggedIn={this.state.isLoggedIn}
@@ -234,16 +237,16 @@ handleImage(event) {
                       handleRegistration ={this.handleRegistration}
                     />
                   }></Route>
-                <Route path="/recipes" children={
+                <Route exact path="/recipes" children={
                       <RecipeHomepage
                         recipes={this.state.recipes}
-                        removeRecipe = {this.removeRecipe}
                         editRecipe={this.editRecipe}
                         preview={this.state.preview}
                         recipeImage={this.state.recipeImage}
                         handleImage = {this.handleImage}
                         addRecipe={this.addRecipe}/>
                     }/>
+
                   <Route path="/user/recipes" children={
                   <RecipeList
                     recipes={this.state.recipes}
@@ -261,8 +264,24 @@ handleImage(event) {
 
             <Route exact path="/recipe/:id" component={RecipeDetail}/>
             <Route exact path="/recipe/edit/:id" component={RecipeEdit}/>
-          
 
+              <Route excat path="/public/recipes" children={
+              <RecipePublic
+                recipes={this.state.recipes}
+
+                />
+            }/>
+
+              <Route exact path="/" children={
+                      <RecipeHomepage
+                        recipes={this.state.recipes}
+                        removeRecipe = {this.removeRecipe}
+                        editRecipe={this.editRecipe}
+                        preview={this.state.preview}
+                        recipeImage={this.state.recipeImage}
+                        handleImage = {this.handleImage}
+                        addRecipe={this.addRecipe}/>
+                    }/>
 
             </div>
 
