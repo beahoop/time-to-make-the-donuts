@@ -1,40 +1,47 @@
-import React, { useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+import Carousel from 'react-bootstrap/Button';
 
 
 function Example() {
-  const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        Launch static backdrop modal
-      </Button>
+    <Carousel>
+<Carousel.Item interval={1000}>
+<img
+  className="d-block w-100"
+  src="holder.js/800x400?text=First slide&bg=373940"
+  alt="First slide"
+/>
+<Carousel.Caption>
+  <h3>First slide label</h3>
+  <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+</Carousel.Caption>
+</Carousel.Item>
+<Carousel.Item interval={500}>
+<img
+  className="d-block w-100"
+  src="holder.js/800x400?text=Second slide&bg=282c34"
+  alt="Second slide"
+/>
+<Carousel.Caption>
+  <h3>Second slide label</h3>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+</Carousel.Caption>
+</Carousel.Item>
+<Carousel.Item>
+<img
+  className="d-block w-100"
+  src="holder.js/800x400?text=Third slide&bg=20232a"
+  alt="Third slide"
+/>
+<Carousel.Caption>
+  <h3>Third slide label</h3>
+  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+</Carousel.Caption>
+</Carousel.Item>
+</Carousel>
 
-      <Modal
-        show={show}
-        onHide={handleClose}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Modal title</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          I will not close if you click outside me. Dont even try to press
-          escape key.
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary">Understood</Button>
-        </Modal.Footer>
-      </Modal>
     </>
   );
 }
